@@ -13,6 +13,9 @@ const App = () => {
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
+  const [message, setMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
@@ -39,20 +42,27 @@ const App = () => {
         'bloglistAppUser', JSON.stringify(user)
       )
       blogService.setToken(user.token)
+      setMessage('ログインに成功しました')
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
       setUser(user)
       setUsername('')
       setPassword('')
     } catch (exception) {
-      // setErrorMessage('Wrong credentials')
-      // setTimeout(() => {
-      //   setErrorMessage(null)
-      // }, 5000)
-      alert('error')
+      setErrorMessage('ログインに失敗しました')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     }
   }
 
   const handleLogout = () => {
     window.localStorage.clear()
+    setMessage('ログアウトしました')
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
     setUser(null)
     setUsername('')
     setPassword('')
@@ -66,6 +76,10 @@ const App = () => {
         title, author, url
       })
       setBlogs(blogs.concat(blog))
+      setMessage(`a new blog ${blog.title} by ${blog.author}`)
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
       setAuthor('')
       setTitle('')
       setUrl('')
@@ -113,6 +127,7 @@ const App = () => {
     return(
       <div>
         <h2>blogs</h2>
+        { message && <div>{`${message}`}</div> }
         <div>
           {user.username} logged in
           <button onClick={handleLogout}>logout</button>
@@ -131,6 +146,8 @@ const App = () => {
   const loginForm = () => {
     return(
       <form onSubmit={handleLogin}>
+        { message && <div>{`${message}`}</div> }
+        { errorMessage && <div>{`${errorMessage}`}</div> }
         <div>
           username
           <input
