@@ -76,9 +76,9 @@ const App = () => {
   const handleLogout = () => {
     window.localStorage.clear()
     setMessage('ログアウトしました')
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000)
     setUser(null)
     setUsername('')
     setPassword('')
@@ -140,14 +140,14 @@ const App = () => {
         user
           ? blogList()
           : <LoginForm
-              handleLogin={handleLogin}
-              username={username}
-              password={password}
-              handleUsernameChange={setUsername}
-              handlePasswordChange={setPassword}
-              message={message}
-              errorMessage={errorMessage}
-              />
+            handleLogin={handleLogin}
+            username={username}
+            password={password}
+            handleUsernameChange={setUsername}
+            handlePasswordChange={setPassword}
+            message={message}
+            errorMessage={errorMessage}
+          />
       }
     </>
   )
