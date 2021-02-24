@@ -19,7 +19,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+      setBlogs(sortBlogs(blogs))
     )
   }, [])
 
@@ -31,6 +31,22 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
+
+  // 値の変更とフックの発火にラグがあって、正しい値で比較できていない
+  // blogsが最新になるタイミングで都度sortかけないとダメっぽい
+  // (永久ループとかにはならなかった)
+  // useEffect(() => {
+  //   setBlogs(sortBlogs(blogs))
+  // }, [blogs])
+
+  const sortBlogs = blogs => {
+    return blogs.sort((a, b) => {
+      console.log(a, b)
+      if(a.likes > b.likes) return -1
+      if(a.likes < b.likes) return 1
+      return 0
+    })
+  }
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -87,7 +103,7 @@ const App = () => {
     const newBlogs = blogs.map(b => {
       return b.id === blog.id ? blog : b
     })
-    setBlogs(newBlogs)
+    setBlogs(sortBlogs(newBlogs))
   }
 
   const blogList = () => {
