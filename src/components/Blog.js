@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
+import blogService from '../services/blogs'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, updateBlogs }) => {
   const [visible, setVisible] = useState(false)
 
   const buttonLabel = () => visible ? 'hide' : 'view'
@@ -13,6 +14,12 @@ const Blog = ({ blog }) => {
     marginBottom: 5
   }
 
+  const voteLike = (blog) => {
+    const newBlog = { ...blog, likes: blog.likes + 1 }
+    blogService.updateBlog(newBlog)
+    updateBlogs(newBlog)
+  }
+
   return(
     <div style={blogStyle}>
       {blog.title}
@@ -21,7 +28,7 @@ const Blog = ({ blog }) => {
         visible &&
         <>
           {blog.url}<br />
-          {blog.likes}<button>like</button><br />
+          {blog.likes}<button onClick={() => voteLike(blog)}>like</button><br />
           {blog.author}<br />
         </>
       }
