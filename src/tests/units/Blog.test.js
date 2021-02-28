@@ -1,6 +1,6 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
-import { render, fireEvent } from '@testing-library/react'
+import { render, fireEvent, screen } from '@testing-library/react'
 import { prettyDOM } from '@testing-library/dom'
 import Blog from '../../components/Blog'
 
@@ -53,4 +53,30 @@ test('viewボタンをクリックすると、詳細情報が表示される', (
   expect(component.container).toHaveTextContent('はこざる')
   expect(component.container).toHaveTextContent("https://hakozaru.com")
   expect(component.container).toHaveTextContent("10")
+})
+
+test('いいね(likes)ボタンがクリックされると、いいねのイベントが呼び出されること', () => {
+  const blog = {
+    title: "mission street",
+    author: "はこざる",
+    url: "https://hakozaru.com",
+    likes: 10
+  }
+  const updateMockHandler = jest.fn()
+  const deleteMockHandler = jest.fn()
+
+  const component = render(
+    <Blog blog={blog} updateBlogs={updateMockHandler} deleteBlogs={deleteMockHandler}/>
+  )
+
+  const btn = component.container.getElementsByClassName('test-btn')[0]
+  fireEvent.click(btn)
+
+  const likesBtn = component.container.getElementsByClassName('likes-btn')[0]
+  fireEvent.click(likesBtn)
+  fireEvent.click(likesBtn)
+
+  screen.debug()
+
+  expect(updateMockHandler.mock.calls).toHaveLength(2)
 })

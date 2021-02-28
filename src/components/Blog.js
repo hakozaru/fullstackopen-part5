@@ -36,7 +36,7 @@ const Blog = ({ blog, updateBlogs, deleteBlogs }) => {
         visible &&
         <>
           {blog.url}<br />
-          {blog.likes}<button onClick={() => voteLike(blog)}>like</button><br />
+          {blog.likes}<button className='likes-btn' onClick={() => voteLike(blog)}>like</button><br />
           {blog.author}<br />
           <button onClick={() => removeBlog(blog)}>remove</button><br />
         </>
