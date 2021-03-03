@@ -1,5 +1,3 @@
-import { func } from "prop-types"
-
 describe('Blog app', function() {
   beforeEach(function() {
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
@@ -36,6 +34,29 @@ describe('Blog app', function() {
       cy.get('#login-btn').click()
 
       cy.contains('ログインに失敗しました')
+    })
+  })
+
+  describe.only('ログインしているとき', function() {
+    beforeEach(function() {
+      cy.request('POST', 'http://localhost:3003/api/login/', {
+        username: 'test',
+        password: 'password'
+      }).then(res => {
+        localStorage.setItem('bloglistAppUser', JSON.stringify(res.body))
+        cy.visit('http://localhost:3001')
+      })
+    })
+
+    it('ブログが作成できること', function() {
+      cy.get('#new-blog-open').click()
+      cy.get('.title-input').type('tst title')
+      cy.get('.author-input').type('tst author')
+      cy.get('.url-input').type('tst url')
+      cy.get('#create-blog-btn').click()
+
+      cy.contains('a new blog tst title by tst author')
+      cy.get('.blog').should('have.length', 1)
     })
   })
 })

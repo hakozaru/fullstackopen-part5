@@ -45,7 +45,7 @@ const CreateBlogForm = ({ handleCreate }) => {
           className='url-input'
         />
       </div>
-      <button type="submit">create</button>
+      <button id='create-blog-btn' type="submit">create</button>
     </form>
   )
 }
