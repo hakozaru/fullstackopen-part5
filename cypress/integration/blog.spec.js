@@ -72,5 +72,17 @@ describe('Blog app', function() {
         cy.get('.blog').contains('1')
       })
     })
+
+    describe('remove', function() {
+      beforeEach(function() {
+        cy.createBlog({ title: 'test', author: 'aut', url: 'https://hoge.com' })
+      })
+      it('removeを押すとブログが削除されること', function() {
+        cy.get('.test-btn').click()
+        cy.get('.blog').contains('test')
+        cy.get('.blog').get('.remove-btn').click()
+        cy.get('.blog').should('have.length', 0)
+      })
+    })
   })
 })
