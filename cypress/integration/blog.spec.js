@@ -84,5 +84,24 @@ describe('Blog app', function() {
         cy.get('.blog').should('have.length', 0)
       })
     })
+
+    describe.only('並び順', function() {
+      beforeEach(function() {
+        cy.createBlog({ title: 'test', author: 'aut', url: 'https://hoge.com' })
+        cy.createBlog({ title: 'test2', author: 'aut2', url: 'https://hoge2.com' })
+        cy.createBlog({ title: 'test3', author: 'aut3', url: 'https://hoge3.com' })
+      })
+
+      it('likesの多い順番に並ぶこと', function() {
+        cy.get('.blog').get('.test-btn').last().click()
+        cy.get('.blog').get('.likes-btn').click()
+
+        cy.get('.blog').then(blogs => {
+          cy.wrap(blogs[0]).contains('test3')
+          cy.wrap(blogs[1]).contains('test')
+          cy.wrap(blogs[2]).contains('test2')
+        })
+      })
+    })
   })
 })
