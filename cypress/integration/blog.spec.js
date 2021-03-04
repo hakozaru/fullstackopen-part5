@@ -48,15 +48,29 @@ describe('Blog app', function() {
       })
     })
 
-    it('ブログが作成できること', function() {
-      cy.get('#new-blog-open').click()
-      cy.get('.title-input').type('tst title')
-      cy.get('.author-input').type('tst author')
-      cy.get('.url-input').type('tst url')
-      cy.get('#create-blog-btn').click()
+    describe('ブログ', function() {
+      it('ブログが作成できること', function() {
+        cy.get('#new-blog-open').click()
+        cy.get('.title-input').type('tst title')
+        cy.get('.author-input').type('tst author')
+        cy.get('.url-input').type('tst url')
+        cy.get('#create-blog-btn').click()
 
-      cy.contains('a new blog tst title by tst author')
-      cy.get('.blog').should('have.length', 1)
+        cy.contains('a new blog tst title by tst author')
+        cy.get('.blog').should('have.length', 1)
+      })
+    })
+
+    describe('likes', function() {
+      beforeEach(function() {
+        cy.createBlog({ title: 'test', author: 'aut', url: 'https://hoge.com' })
+      })
+      it('likesを押すと1ずつ加算されること', function() {
+        cy.get('.test-btn').click()
+        cy.get('.blog').contains('0')
+        cy.get('.blog').get('.likes-btn').click()
+        cy.get('.blog').contains('1')
+      })
     })
   })
 })
